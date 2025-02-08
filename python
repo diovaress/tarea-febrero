@@ -1,0 +1,62 @@
+import mysql.connector 
+
+
+conexion = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='',
+    database='pacientes'
+)
+
+cursor = conexion.cursor()
+
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS pacientes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(255),
+        apellido VARCHAR(255),
+        telefono VARCHAR(20),
+        edad INT,
+        direccion VARCHAR(255)
+    )
+''')
+
+while True:
+
+    print()
+    print("******BIENVENIDO AL HOSPITAL SAN JUAN DE DIOS*****\n")
+    print("\n--- REGISTRO DE PACIENTES ---")
+    print("1. Agregar paciente")
+    print("2. Finalizar")
+    
+    opcion = input("\nSeleccione una opcion (1-2): ")
+    
+    if opcion == "1":
+        print("\nIngrese los datos del paciente:")
+        nombre = input("Nombre: ")
+        apellido = input("Apellido: ")
+        telefono = input("Teléfono: ")
+        edad = int(input("Edad: "))
+        direccion = input("Dirección: ")
+        
+        
+        cursor.execute('''
+            INSERT INTO pacientes (nombre, apellido, telefono, edad, direccion)
+            VALUES (%s, %s, %s, %s, %s)
+        ''', (nombre, apellido, telefono, edad, direccion))
+        
+     
+        conexion.commit()
+        print("\nPaciente ha sido registrado correctamente")
+        
+    elif opcion == "2":
+        print("\nGuardando datos y cerrando programa...")
+        break
+    
+    else:
+        print("\n opcion incorrecta. elija 1 o 2.")
+
+
+conexion.close()
+print("Programa finalizado. Todos los datos han sido guardados.")
